@@ -65,7 +65,7 @@ function request(method, url, headers, params) {
 	});
 }
 
-// testing, not used 
+// validate method
 function validate(status) {
 	if(status >= 200 && status <= 304 || status == 409) { // good
 		return true;
