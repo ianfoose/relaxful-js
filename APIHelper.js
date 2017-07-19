@@ -1,4 +1,13 @@
-function request(method, url, headers, params) {
+/* make a request
+* 
+* params
+* method String
+* url String
+* obj Optional overload params, such as headers and params 
+*
+* retruns a promise
+*/
+function request(method, url, obj) {
 	return new Promise(function(resolve,reject) {
 		if(url != null) {
 			if(method == null) {
@@ -8,30 +17,34 @@ function request(method, url, headers, params) {
 			var req = new XMLHttpRequest();
 			req.open(method, url, true);
 
-			if(params != null || params != undefined) {
-				if(typeof params !== 'object') { // not formdata 
-					console.log('not object');
-					req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				} else {
-					console.log('object');
-					//req.setRequestHeader("Content-type", "multipart/form-data;");
+			var params;
 
-					var formData = new FormData();
+			if(obj) {
+				if(obj.params) {
+					if(typeof obj.params !== 'object') { // not formdata 
+						console.log('not object');
+						req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					} else {
+						console.log('object');
+						//req.setRequestHeader("Content-type", "multipart/form-data;");
 
-					for (var key in params) {
-	    				formData.append(key, params[key]);
+						var formData = new FormData();
+
+						for (var key in obj.params) {
+		    				formData.append(key, obj.params[key]);
+						}
+
+						params = formData;
 					}
-
-					params = formData;
 				}
-			}
 
-			if(headers != undefined) {
-				for (var i = 0; i<headers.length; i++) {
-					var header = headers[i];
-					req.setRequestHeader(header.key, header.value);
-				};
-			} 
+				if(obj.headers) {
+					for (var i = 0; i<obj.headers.length; i++) {
+						var header = obj.headers[i];
+						req.setRequestHeader(header.key, header.value);
+					};
+				} 
+			}
 
 			req.onload = function(e) {
 				var resp = {
@@ -45,9 +58,18 @@ function request(method, url, headers, params) {
 								result = JSON.parse(req.responseText);
 								resolve(result);
 							} catch(error) {
-								reject(new Error('invalid JSON')); 
+								reject(new Error('Invalid JSON')); 
 							}
 						});
+					},
+					validate() {
+						return new Promise(function(resolve,reject) {
+							if(req.status >= 200 && req.status <= 304 || req.status == 409) {
+								resolve(resp);
+							}
+							return reject(new Error(req.status+' Error'));
+						});
+						
 					}
 				}
 
@@ -57,18 +79,10 @@ function request(method, url, headers, params) {
 			req.onerror = function() {
 				reject(new Error('Network Error'));
 			}
-
+			
 			req.send(params); 
 		} else {
 			reject(new Error('URL is empty, URL must not be empty'));
 		}
 	});
-}
-
-// validate method
-function validate(status) {
-	if(status >= 200 && status <= 304 || status == 409) { // good
-		return true;
-	}
-	return false; // bad
 }
