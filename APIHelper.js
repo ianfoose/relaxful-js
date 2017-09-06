@@ -1,3 +1,15 @@
+// request object
+var apiReq;
+
+/*
+* Cancel a request
+*
+* return void
+*/
+function cancelRequest() {
+	if(apiReq) { apiReq.abort(); }
+}
+
 /* make a request
 * 
 * params
@@ -9,25 +21,22 @@
 */
 function request(method, url, obj) {
 	return new Promise(function(resolve,reject) {
-		if(url != null) {
-			if(method == null) {
+		if(url) {
+			if(!method) {
 				method = 'GET'; // defaults to get
 			} 
 
-			var req = new XMLHttpRequest();
-			req.open(method, url, true);
+			apiReq = new XMLHttpRequest();
+			apiReq.open(method, url, true);
 
 			var params;
 
 			if(obj) {
 				if(obj.params) {
 					if(typeof obj.params !== 'object') { // not formdata 
-						console.log('not object');
-						req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						params = obj.params;
 					} else {
-						console.log('object');
-						//req.setRequestHeader("Content-type", "multipart/form-data;");
-
 						var formData = new FormData();
 
 						for (var key in obj.params) {
@@ -41,21 +50,21 @@ function request(method, url, obj) {
 				if(obj.headers) {
 					for (var i = 0; i<obj.headers.length; i++) {
 						var header = obj.headers[i];
-						req.setRequestHeader(header.key, header.value);
+						apiReq.setRequestHeader(header.key, header.value);
 					};
 				} 
 			}
 
-			req.onload = function(e) {
+			apiReq.onload = function(e) {
 				var resp = {
-					status:req.status,
-					message:req.statusText,
-					headers:req.getAllResponseHeaders(),
-					text:req.responseText,
+					status:apiReq.status,
+					message:apiReq.statusText,
+					headers:apiReq.getAllResponseHeaders(),
+					text:apiReq.responseText,
 					json() {
 						return new Promise(function(resolve,reject) {
 							try {
-								result = JSON.parse(req.responseText);
+								result = JSON.parse(apiReq.responseText);
 								resolve(result);
 							} catch(error) {
 								reject(new Error('Invalid JSON')); 
@@ -64,23 +73,26 @@ function request(method, url, obj) {
 					},
 					validate() {
 						return new Promise(function(resolve,reject) {
-							if(req.status >= 200 && req.status <= 304 || req.status == 409) {
+							if(apiReq.status >= 200 && apiReq.status <= 304 || apiReq.status == 409) {
 								resolve(resp);
 							}
-							return reject(new Error(req.status+' Error'));
+							return reject(new Error(apiReq.status+' Error'));
 						});
-						
 					}
 				}
 
 				resolve(resp);
 			}
 
-			req.onerror = function() {
+			apiReq.onerror = function() {
 				reject(new Error('Network Error'));
 			}
+
+			apiReq.onabort = function() {
+				apiReq = null;
+			}
 			
-			req.send(params); 
+			apiReq.send(params); 
 		} else {
 			reject(new Error('URL is empty, URL must not be empty'));
 		}
