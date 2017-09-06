@@ -56,4 +56,12 @@ request('GET','url',{
 });
 ```
 
+### Cancel a Request
+
+Cancels the current request.
+
+```js
+cancelRequest();
+```
+
 
