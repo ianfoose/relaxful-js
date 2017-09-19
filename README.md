@@ -2,6 +2,8 @@
 
 ## Use
 
+The ```request()``` function retruns a promise object and the XMLHttpRequest object
+
 ### JSON
 
 ```js
@@ -19,7 +21,7 @@ request('GET','url').then(response=>{
 ### Text
 
 ```js
-request('GET','url').then(response=>{
+request('GET','url').promise.then(response=>{
 	alert(response.text);
 }).catch(error => {
 	alert(error.message);
@@ -29,7 +31,7 @@ request('GET','url').then(response=>{
 ### Validate
 
 ```js
-request('GET','url').then(response=>{
+request('GET','url').promise.then(response=>{
 	return response.validate();
 }).then(response=>{
 	// do something with valid response
@@ -61,7 +63,7 @@ request('GET','url',{
 Cancels the current request.
 
 ```js
-cancelRequest();
+requestObj.req.cancelRequest();
 ```
 
 
