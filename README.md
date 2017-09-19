@@ -7,7 +7,7 @@ The ```request()``` function retruns a promise object and the XMLHttpRequest obj
 ### JSON
 
 ```js
-request('GET','url').then(response=>{
+request('GET','url').promise.then(response=>{
 	return response.validate();
 }).then(response=>{
 	return response.json();
