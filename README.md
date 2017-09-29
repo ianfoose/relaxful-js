@@ -1,6 +1,14 @@
-# API Helper JS
+# Relaxful
+
+A Javascript REST API client.
 
 ## Use
+
+Include file
+
+```html
+<script type="text/javascript" src="relaxful.js"></script>
+```
 
 The ```request()``` function retruns a promise object and the XMLHttpRequest object
 
