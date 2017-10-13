@@ -30,13 +30,7 @@ function request(method, url, obj) {
 							apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 							params = obj.params;
 						} else {
-							var formData = new FormData();
-
-							for (var key in obj.params) {
-			    				formData.append(key, obj.params[key]);
-							}
-
-							params = formData;
+							params = obj.params; 
 						}
 					}
 
@@ -79,7 +73,7 @@ function request(method, url, obj) {
 									} catch(error) { }
 								}
 
-								return reject(new Error(msg));
+								return reject({status: apiReq.status, message:msg});
 							});
 						}
 					}
