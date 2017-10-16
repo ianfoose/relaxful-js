@@ -35,10 +35,11 @@ function request(method, url, obj) {
 					}
 
 					if(obj.headers) {
-						for (var i = 0; i<obj.headers.length; i++) {
-							var header = obj.headers[i];
-							apiReq.setRequestHeader(header.key, header.value);
-						};
+						for (var key in obj.headers) {
+							if (obj.headers.hasOwnProperty(key)) {
+					        		apiReq.setRequestHeader(key, obj.headers[key]);
+					      		}
+					    	}
 					} 
 				}
 
