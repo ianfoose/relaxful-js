@@ -22,15 +22,15 @@ function request(method, url, obj) {
 				apiReq = new XMLHttpRequest();
 				apiReq.open(method, url, true);
 
-				var params;
+				var body;
 
 				if(obj) {
-					if(obj.params) {
-						if(typeof obj.params !== 'object') { // not formdata 
-							apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-							params = obj.params;
+					if(obj.body) {
+						if(typeof obj.body !== 'object') { // not formdata 
+							apiReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+							params = obj.body;
 						} else {
-							params = obj.params; 
+							params = obj.body; 
 						}
 					}
 
@@ -90,7 +90,7 @@ function request(method, url, obj) {
 					apiReq = null;
 				}
 				
-				apiReq.send(params); 
+				apiReq.send(body); 
 			} else {
 				reject(new Error('URL is empty, URL must not be empty'));
 			}
