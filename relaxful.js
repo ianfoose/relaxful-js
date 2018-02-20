@@ -1,4 +1,4 @@
-// Created by Ian Foose Foose Industries 2017
+// Created by Ian Foose Foose Industries 2018
 /* make a request
 * 
 * params
@@ -70,7 +70,7 @@ function request(method, url, obj) {
 								if(apiReq.responseText) {
 									try {
 										result = JSON.parse(apiReq.responseText);
-										msg = result.result;
+										msg = result;
 									} catch(error) { }
 								}
 
