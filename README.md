@@ -55,7 +55,7 @@ var params = { "id":1 };
 var headers = { "Content-Type": "text/html" };
 
 request('GET','url',{
-'params':params,
+'body':params,
 'headers':headers
 }).then(response=>{
 	return response.validate();
@@ -73,5 +73,3 @@ Cancels the current request.
 ```js
 requestObj.req.cancelRequest();
 ```
-
-
