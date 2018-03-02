@@ -28,9 +28,9 @@ function request(method, url, obj) {
 					if(obj.body) {
 						if(typeof obj.body !== 'object') { // not formdata 
 							apiReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-							params = obj.body;
+							body = obj.body;
 						} else {
-							params = obj.body; 
+							body = obj.body; 
 						}
 					}
 
