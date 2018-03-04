@@ -69,8 +69,7 @@ function request(method, url, obj) {
 
 								if(apiReq.responseText) {
 									try {
-										result = JSON.parse(apiReq.responseText);
-										msg = result;
+										msg = JSON.parse(apiReq.responseText);
 									} catch(error) { }
 								}
 
