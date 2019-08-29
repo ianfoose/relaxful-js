@@ -1,4 +1,4 @@
-// Created by Ian Foose Foose Industries 2018
+// Created by Ian Foose Foose Industries 2019
 /* make a request
 * 
 * params
@@ -13,6 +13,12 @@ function request(method, url, obj) {
 
 	var requestObj = {
 		req:apiReq,
+		reqData: {
+			url: url,
+			method: method,
+			headers: obj.headers,
+			body: obj.body
+		},
 		promise: new Promise(function(resolve, reject) {
 			if(url) {
 				if(!method) {
@@ -29,17 +35,17 @@ function request(method, url, obj) {
 						if(typeof obj.body !== 'object') { // not formdata 
 							apiReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 							body = obj.body;
-						} else {
-							body = obj.body; 
+						} else {	
+							body = obj.body;
 						}
 					}
 
 					if(obj.headers) {
 						for (var key in obj.headers) {
 							if (obj.headers.hasOwnProperty(key)) {
-					        		apiReq.setRequestHeader(key, obj.headers[key]);
-					      		}
-					    	}
+					        	apiReq.setRequestHeader(key, obj.headers[key]);
+					      	}
+					    }
 					} 
 				}
 
@@ -95,6 +101,8 @@ function request(method, url, obj) {
 			}
 		})
 	}
+
+	requestObj.req = apiReq;
 
 	return requestObj;
 }
