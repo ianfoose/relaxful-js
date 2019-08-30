@@ -11,13 +11,13 @@
 function request(method, url, obj) {
 	var apiReq;
 
+
+
 	var requestObj = {
 		req:apiReq,
 		reqData: {
 			url: url,
-			method: method,
-			headers: obj.headers,
-			body: obj.body
+			method: method
 		},
 		promise: new Promise(function(resolve, reject) {
 			if(url) {
@@ -46,7 +46,7 @@ function request(method, url, obj) {
 					        	apiReq.setRequestHeader(key, obj.headers[key]);
 					      	}
 					    }
-					} 
+					}
 				}
 
 				apiReq.onload = function(e) {
@@ -103,6 +103,14 @@ function request(method, url, obj) {
 	}
 
 	requestObj.req = apiReq;
+
+	if(obj && obj.headers) {
+		requestObj.reqData.headers = obj.headers;
+	}
+
+	if(obj && obj.body) {
+		requestObj.reqData.body = obj.body;
+	}
 
 	return requestObj;
 }
