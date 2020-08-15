@@ -66,6 +66,10 @@ request('GET','url',{
 });
 ```
 
+### Download File
+
+you may pass the parameter `filename: <name of file>` in the object of the request to return file data for your application to handle.
+
 ### Cancel a Request
 
 Cancels the current request.
