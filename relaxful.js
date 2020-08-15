@@ -11,13 +11,12 @@
 function request(method, url, obj) {
 	var apiReq;
 
-
-
 	var requestObj = {
 		req:apiReq,
-		reqData: {
+		data: {
 			url: url,
-			method: method
+			method: method,
+			filename: obj.filename
 		},
 		promise: new Promise(function(resolve, reject) {
 			if(url) {
@@ -33,7 +32,7 @@ function request(method, url, obj) {
 				if(obj) {
 					if(obj.body) {
 						if(typeof obj.body !== 'object') { // not formdata 
-							apiReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+							apiReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 							body = obj.body;
 						} else {	
 							body = obj.body;
@@ -71,12 +70,15 @@ function request(method, url, obj) {
 									resolve(resp);
 								}
 
-								var msg = apiReq.status+' Error';
+								var msg = `${apiReq.status} Error`;
 
 								if(apiReq.responseText) {
 									try {
 										msg = JSON.parse(apiReq.responseText);
-									} catch(error) { }
+									} catch(error) {
+										// message is not JSON
+										msg = apiReq.responseText;
+									}
 								}
 
 								return reject({status: apiReq.status, message:msg});
@@ -94,7 +96,7 @@ function request(method, url, obj) {
 				apiReq.onabort = function() {
 					apiReq = null;
 				}
-				
+
 				apiReq.send(body); 
 			} else {
 				reject(new Error('URL is empty, URL must not be empty'));
@@ -105,11 +107,11 @@ function request(method, url, obj) {
 	requestObj.req = apiReq;
 
 	if(obj && obj.headers) {
-		requestObj.reqData.headers = obj.headers;
+		requestObj.data.headers = obj.headers;
 	}
 
 	if(obj && obj.body) {
-		requestObj.reqData.body = obj.body;
+		requestObj.data.body = obj.body;
 	}
 
 	return requestObj;
