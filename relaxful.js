@@ -12,7 +12,7 @@ function request(method, url, obj) {
 	var apiReq;
 
 	var requestObj = {
-		req:apiReq,
+		req: apiReq,
 		data: {
 			url: url,
 			method: method,
