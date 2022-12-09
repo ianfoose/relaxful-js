@@ -8,7 +8,7 @@
 *
 * retruns a request object
 */
-function request(method, url, obj) {
+async function request(method, url, obj) {
 	var apiReq;
 
 	var requestObj = {
